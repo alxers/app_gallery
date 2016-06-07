@@ -431,10 +431,6 @@ border-color: transparent #fff200 transparent transparent;
 
 /* Custom styles */
 
-.gallery .item {
-
-}
-
 .gallery {
   height: 70vh;
   box-shadow: 0px 0px 4px 2px #000;
@@ -453,6 +449,56 @@ border-color: transparent #fff200 transparent transparent;
 .gallery .item:nth-of-type(3) {
   background: url('bg3.jpg') no-repeat center center fixed;
   background-size: cover;
+}
+
+.gallery .secondary-controls {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  /* z-index: 2; */
+  pointer-events: none;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.superfluous-arrow {
+  pointer-events: auto;
+  height: 60px;
+  width: 60px;
+  border-radius: 60px;
+  color: rgba(255, 255, 255, 0.6);
+  /* font-size: 3em; */
+  /* font-weight: bold; */
+  /* text-decoration: none; */
+  /* text-align: center; */
+  background: rgba(0, 0, 0, 0.1);
+  transition: all .25s;
+}
+
+.superfluous-arrow:hover {
+  transform: scale(1.1);
+}
+
+.superfluous-arrow-left {
+  float: left;
+  margin-left: 3em;
+}
+
+.superfluous-arrow-left img {
+  margin-top: 5px;
+  margin-left: 3px;
+}
+
+.superfluous-arrow-right {
+  float: right;
+  margin-right: 3em;
+}
+
+.superfluous-arrow-right img {
+  margin-top: 5px;
+  margin-left: 7px;
 }
 
 .description {

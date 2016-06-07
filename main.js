@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', function(event) {
   let descriptionLinks = document.querySelectorAll('.description-item');
   let appLinkNum;
 
-  let intId = startSlider();
+  // let intId = startSlider();
   
   document.addEventListener('click', function(e) {
     for (let i = 0; i < appLinks.length; i++) {
