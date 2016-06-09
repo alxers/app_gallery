@@ -1,46 +1,68 @@
 document.addEventListener('DOMContentLoaded', function(event) {
 
-  // Array.prototype.slice.call(document.querySelectorAll('.item')).indexOf(document.querySelectorAll('.item')[2])
-
-  let slides = Array.prototype.slice.call(document.querySelectorAll('.js-control-button'));
+  let controls = Array.prototype.slice.call(document.querySelectorAll('.js-control-button'));
+  let slides = Array.prototype.slice.call(document.querySelectorAll('.js-slide'));
   let descriptionLinks = Array.prototype.slice.call(document.querySelectorAll('.js-description-item'));
-  let currentSlide = document.querySelector('.js-is-active');
+  let currentSlideNum = slideNum();
+
+  const SLIDER_TIMING = 5000;
+  let intId = startSlider();
 
   document.addEventListener('click', function(e) {
 
-    let slideNum = slides.indexOf(e.target);
+    let clickedSlideNum = controls.indexOf(e.target);
 
-    if (e.target.className.match('js-control-button')) {
-      goToSlide(slideNum);
+    if (clickedSlideNum >= 0) {
+      currentSlideNum = clickedSlideNum;
+    } else {
+      currentSlideNum = slideNum();
     }
 
-    if (e.target.className.match('js-arrow-right')) {
-      nextSlide();
+    if (e.target.className.match('js-control-button') && clickedSlideNum >= 0) {
+      goToSlide(clickedSlideNum);
     }
 
-    if (e.target.className.match('js-arrow-left')) {
-      previousSlide();
+    if (e.target.className.match('js-arrow-right') || e.target.parentElement.className.match('js-arrow-right')) {
+      nextSlide(currentSlideNum);
     }
-    
+
+    if (e.target.className.match('js-arrow-left') || e.target.parentElement.className.match('js-arrow-left')) {
+      previousSlide(currentSlideNum);
+    }
+
   });
 
-  function goToSlide(slideNum) {
+  function slideNum() {
+    return controls.indexOf(Array.prototype.slice.call(document.querySelectorAll('.js-is-active'))[0]);
+  }
 
-    removeClassFromAllNodes('js-is-active', slides);
+  function goToSlide(slide) {
+
+    if (slide >= slides.length) {
+      slide = 0;
+    }
+
+    if (slide < 0) {
+      slide = slides.length - 1;
+    }
+
+    removeClassFromAllNodes('js-is-active', controls);
+    removeClassFromAllNodes('js-is-visible', slides);
     removeClassFromAllNodes('js-is-visible', descriptionLinks);
 
-    slides[slideNum].classList.add('js-is-active');
-    descriptionLinks[slideNum].classList.add('js-is-visible');
+    controls[slide].classList.add('js-is-active');
+    slides[slide].classList.add('js-is-visible');
+    descriptionLinks[slide].classList.add('js-is-visible');
 
-    // restartAutoPlay();
+    restartAutoPlay();
   }
 
-  function nextSlide() {
-    goToSlide(currentSlide + 1);
+  function nextSlide(currentSlideNum) {
+    goToSlide(currentSlideNum + 1);
   }
 
-  function previousSlide() {
-    goToSlide(currentSlide - 1);
+  function previousSlide(currentSlideNum) {
+    goToSlide(currentSlideNum - 1);
   }
 
   function removeClassFromAllNodes(className, nodes) {
@@ -54,62 +76,13 @@ document.addEventListener('DOMContentLoaded', function(event) {
     intId = startSlider();
   }
 
-  // let appLinks = document.querySelectorAll('.control-button');
-  // let descriptionLinks = document.querySelectorAll('.description-item');
-  // let currentSlide = document.querySelectorAll('.js-is-active')[0];
-  // // set to 1 so startSlider clicks to the second slide first time
-  // let appLinkNum = 1;
+  function startSlider() {
+    let intervalId = setInterval(function() {
+      let currentSlide = slideNum();
+      nextSlide(currentSlide);
+    }, SLIDER_TIMING);
 
-  // const SLIDER_TIMING = 5000;
-  // let intId = startSlider();
-  
-  // document.addEventListener('click', function(e) {
-  //   for (let i = 0; i < appLinks.length; i++) {
-  //     if (e.target.className.match('js-control-button')) {
-
-  //       // if (e.target.className.match('js-arrow-left')) {
-  //       //   appLinkNum += 1;
-  //       // }
-
-  //       // if (e.target.className.match('js-arrow-right')) {
-  //       //   appLinkNum -= 1;
-  //       // }
-
-  //       appLinkNum = parseInt(e.target.className.match(/\d+/g)[0], 10);
-  //       descriptionLinks[i].classList.remove('js-is-visible');
-  //       descriptionLinks[appLinkNum - 1].classList.add('js-is-visible');
-
-  //       clearInterval(intId);
-  //       intId = startSlider();
-  //     }
-  //   }
-  // }, false);
-
-  // function goToSlide(slideNum) {
-  //   for (let i = 0; i < appLinks.length; i++) {
-  //     if (e.target.className.match('js-control-button')) {
-
-  //       appLinkNum = parseInt(e.target.className.match(/\d+/g)[0], 10);
-  //       descriptionLinks[i].classList.remove('js-is-visible');
-  //       descriptionLinks[appLinkNum - 1].classList.add('js-is-visible');
-
-  //       clearInterval(intId);
-  //       intId = startSlider();
-  //     }
-  //   }
-  // }
-
-  // function startSlider() {
-  //   let intervalId = setInterval(function() {
-  //     if (appLinkNum < appLinks.length) {
-  //       appLinks[appLinkNum].click();
-  //     } else {
-  //       appLinkNum = 0;
-  //       appLinks[appLinkNum].click();
-  //     }
-  //   }, SLIDER_TIMING);
-
-  //   return intervalId;
-  // }
+    return intervalId;
+  }
 
 }, false);
